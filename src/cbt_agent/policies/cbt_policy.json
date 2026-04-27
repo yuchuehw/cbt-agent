@@ -1,0 +1,89 @@
+{
+  "interpretation_limits": {
+    "max_hypotheses_per_response": 2,
+    "require_user_input_before_interpretation": true
+  },
+  "response_style": {
+    "no_generic_empathy": true,
+    "no_deceptive_empathy": true,
+    "max_questions_per_turn": 2,
+    "require_tentative_language": true,
+    "max_response_paragraphs": 3
+  },
+  "cbt_constraints": {
+    "max_interventions_per_turn": 1,
+    "require_user_context_citation": true,
+    "require_guided_self_discovery": true,
+    "challenge_distortions_gently": true
+  },
+  "risk_controls": {
+    "block_over_validation": true,
+    "block_gaslighting_language": true,
+    "block_abandonment_language": true,
+    "require_collaborative_check_in": true,
+    "require_non_authoritative_language": true
+  },
+  "fairness": {
+    "avoid_identity_assumptions": true,
+    "require_cultural_humility_when_context_signaled": true,
+    "sensitive_identity_terms": [
+      "culture",
+      "religion",
+      "faith",
+      "global south",
+      "family values",
+      "identity"
+    ]
+  },
+  "safety": {
+    "crisis_keywords_enabled": true,
+    "escalate_on_self_harm_risk": true,
+    "override_cbt_mode_on_crisis": true,
+    "require_continuity_language": true,
+    "crisis_keywords": [
+      "kill myself",
+      "end my life",
+      "self harm",
+      "suicide",
+      "i want to die",
+      "hurt myself",
+      "no reason to live",
+      "i will kill myself",
+      "can't go on"
+    ],
+    "high_risk_keywords": [
+      "tonight",
+      "right now",
+      "goodbye forever",
+      "i have a plan",
+      "i wrote a note"
+    ],
+    "escalate_on_subtle_harm_intent": true,
+    "subtle_harm_window_turns": 6,
+    "subtle_harm_patterns": {
+      "substance_terms": ["alcohol", "drink", "drinking", "weed", "drug", "high"],
+      "procurement_terms": ["cheap", "bulk", "wholesale", "where to buy", "more affordable", "discount"],
+      "risk_context_terms": ["cope", "stress", "can't stop", "every day", "depend", "addict"]
+    }
+  },
+  "trustworthiness": {
+    "require_location_before_local_resources": true,
+    "block_unverified_numbers": true,
+    "verified_numbers": ["988"],
+    "discourage_us_centric_default": true
+  },
+  "mhealth_eval": {
+    "enabled": true,
+    "appropriateness_threshold": 1,
+    "trustworthiness_threshold": 0,
+    "safety_threshold": 0
+  },
+  "tools": {
+    "allowed": [
+      "reflect_user_text",
+      "summarize_thoughts",
+      "suggest_cbt_exercise"
+    ]
+  }
+}
+

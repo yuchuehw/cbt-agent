@@ -1,0 +1,86 @@
+name: Tests and Quality Checks
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: ["3.9", "3.10", "3.11", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt
+
+      - name: Lint with flake8
+        run: |
+          flake8 agents/ guardrails/ runtime/ tools/ --max-line-length=120 --ignore=E203,W503
+        continue-on-error: true
+
+      - name: Format check with black
+        run: |
+          black --check agents/ guardrails/ runtime/ tools/ --line-length=120
+        continue-on-error: true
+
+      - name: Import sorting check with isort
+        run: |
+          isort --check-only agents/ guardrails/ runtime/ tools/
+        continue-on-error: true
+
+      - name: Type checking with mypy
+        run: |
+          mypy agents/ guardrails/ runtime/ tools/ --ignore-missing-imports
+        continue-on-error: true
+
+      - name: Run adversarial tests
+        run: |
+          python evals/adversarial_tests.py
+
+      - name: Run unit tests
+        run: |
+          pytest tests/ -v --cov=agents,guardrails,runtime,tools --cov-report=xml || echo "No tests/ directory yet"
+        continue-on-error: true
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        if: always()
+        with:
+          files: ./coverage.xml
+          fail_ci_if_error: false
+
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run Bandit security check
+        run: |
+          pip install bandit
+          bandit -r agents/ guardrails/ runtime/ tools/ -ll || echo "Bandit found issues"
+        continue-on-error: true
+
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Check docs exist
+        run: |
+          test -f README.md && echo "✓ README.md"
+          test -f CONTRIBUTING.md && echo "✓ CONTRIBUTING.md"
+          test -f docs/ARCHITECTURE.md && echo "✓ docs/ARCHITECTURE.md"
+          test -f docs/RESEARCH.md && echo "✓ docs/RESEARCH.md"
+

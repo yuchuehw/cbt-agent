@@ -1,0 +1,12 @@
+model:
+  provider: openai
+  model_name: gpt-4.1-mini
+  temperature: 0.4
+
+runtime:
+  max_history_turns: 10
+  auto_repair_on_violation: true
+
+safety:
+  crisis_mode_enabled: true
+
