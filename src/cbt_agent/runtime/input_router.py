@@ -30,7 +30,7 @@ def parse_input(raw_text: str) -> RoutedInput:
         tool_input = parts[2] if len(parts) > 2 else ""
         return RoutedInput(route="command", command="tool", args={"name": tool_name, "input": tool_input})
 
-    if command in {"/help", "/reset", "/exit", "/quit"}:
+    if command in {"/help", "/reset", "/exit", "/quit", "/memory"}:
         return RoutedInput(route="command", command=command.lstrip("/"), args={})
 
     # Unknown slash text falls back to direct mode so content is not lost.

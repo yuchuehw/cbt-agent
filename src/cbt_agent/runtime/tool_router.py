@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from typing import Any, Dict
 
-from guardrails.policy_engine import policy_allows_tool_call
-from tools import therapist_tools
+from cbt_agent.guardrails.policy_engine import policy_allows_tool_call
+from cbt_agent.tools import therapist_tools
 
 TOOL_REGISTRY = {
     "reflect_user_text": therapist_tools.reflect_user_text,
